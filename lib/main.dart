@@ -144,9 +144,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         labelText: "やることを追加してください",
                         // hintText: "ToDoを追加してください"
                       ),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
+                      // keyboardType: TextInputType.multiline,
+                      // maxLines: null,
                       controller: myTextController,
+                      onSubmitted: (input) {
+                        if (input != null) {
+                          modelList.add(Model(
+                              title: input, key: counter + 1, done: false));
+                          setState(() {});
+                          counter = counter + 1;
+                          saveCounter(counter);
+                          saveListData(modelList);
+                          myTextController.clear();
+                        }
+                      },
                     ),
                   ),
                 ),
