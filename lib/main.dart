@@ -57,14 +57,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: 
               TextField(
                 decoration: InputDecoration(
-                    labelText: "Description",
-                    hintText: "ex) read one book about Flutter"),
+                    labelText: "ToDoを追加してください",
+                    // hintText: "ToDoを追加してください"
+                    ),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 controller: myTextController,
               ),
-            ) ,         
-            // Expanded or Flexivle を付与しないとエラーになる。
+            ) ,
+            // Expanded or Flexivle を付与しないとエラーにな  る。
             // [https://github.com/flutter/flutter/issues/17036]
             
             Flexible(
