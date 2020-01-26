@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 void main() => runApp(MyApp());
 
@@ -97,29 +97,46 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Card(
                       elevation: 2.0,
                       key: Key(model.key.toString()),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: ListTile(
-                            leading: const Icon(Icons.people),
-                            title: Text(model.title),
-                          )),
-                          Container(
-                              width: 40,
-                              child: InkWell(
-                                  child: Icon(
-                                    Icons.remove_circle,
-                                    color: Colors.redAccent,
-                                  ),
-                                  onTap: () {
-                                    modelList.remove(model);
-                                    setState(() {
-                                      
-                                    });
-
-                                  }))
-                        ],
-                      ));
+                      child: Slidable(
+                          actionPane: SlidableDrawerActionPane(),
+                          actionExtentRatio: 0.25,
+                          secondaryActions: <Widget>[
+                            IconSlideAction(
+                              caption: '削除',
+                              color: Colors.red,
+                              icon: Icons.delete,
+                              onTap: () {
+                                modelList.remove(model);
+                                setState(() {});
+                              },
+                            ),
+                            IconSlideAction(
+                              caption: '完了',
+                              color: Colors.indigo,
+                              icon: Icons.done,
+                              onTap: () => {},
+                            ),
+                          ],
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: ListTile(
+                                leading: const Icon(Icons.people),
+                                title: Text(model.title),
+                              )),
+                              Container(
+                                  width: 40,
+                                  child: InkWell(
+                                      child: Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onTap: () {
+                                        modelList.remove(model);
+                                        setState(() {});
+                                      }))
+                            ],
+                          )));
                 },
               ).toList(),
             )),
