@@ -111,7 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Icons.remove_circle,
                                     color: Colors.redAccent,
                                   ),
-                                  onTap: () {}))
+                                  onTap: () {
+                                    modelList.remove(model);
+                                    setState(() {
+                                      
+                                    });
+
+                                  }))
                         ],
                       ));
                 },
