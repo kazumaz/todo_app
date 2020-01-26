@@ -95,13 +95,25 @@ class _MyHomePageState extends State<MyHomePage> {
               children: modelList.map(
                 (Model model) {
                   return Card(
-                    elevation: 2.0,
-                    key: Key(model.key.toString()),
-                    child: ListTile(
-                      leading: const Icon(Icons.people),
-                      title: Text(model.title),
-                    ),
-                  );
+                      elevation: 2.0,
+                      key: Key(model.key.toString()),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: ListTile(
+                            leading: const Icon(Icons.people),
+                            title: Text(model.title),
+                          )),
+                          Container(
+                              width: 40,
+                              child: InkWell(
+                                  child: Icon(
+                                    Icons.remove_circle,
+                                    color: Colors.redAccent,
+                                  ),
+                                  onTap: () {}))
+                        ],
+                      ));
                 },
               ).toList(),
             )),
