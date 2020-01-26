@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_app/shared_prefs.dart';
+import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -28,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Model> modelList;
+  List<String> stringTodos = [];
   final myTextController = TextEditingController();
   int counter = 0;
 
@@ -35,6 +38,21 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     modelList = [];
+    initializeApp();
+  }
+
+  // 初期化時に、sharedpreferenceで永続化していたデータをメモリ上に読みこむ。
+  void initializeApp() async {
+    //インスタンスを取得
+    await SharePrefs.setInstance();
+    //Listにデータを取得させる
+    List<String> stringTodos = SharePrefs.getListItems();
+    stringTodos.forEach((String stringTodo) {
+      // String -> Map -> ToDo　の順でcastし、ロードする。
+      modelList.add(new Model.fromJson(json.decode(stringTodo)));
+    });
+    counter = SharePrefs.getCounter();
+    setState(() {});
   }
 
   @override
@@ -67,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Text('OK'),
                         onPressed: () {
                           modelList.removeWhere((model) => model.done == true);
+                          saveListData(modelList);
                           setState(() {});
                           Navigator.of(context).pop(1);
                         },
@@ -101,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           Navigator.of(context).pop(1);
                           modelList.clear();
+                          saveListData(modelList);
                           setState(() {});
                         },
                       ),
@@ -140,6 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         done: false));
                     setState(() {});
                     counter = counter + 1;
+                    saveCounter(counter);
+                    saveListData(modelList);
                     myTextController.clear();
                   },
                 ),
@@ -160,6 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 setState(() {
                   modelList.insert(newIndex, model);
+                  saveListData(modelList);
                 });
               },
               children: modelList.map(
@@ -179,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               onTap: () {
                                 modelList.remove(model);
                                 setState(() {});
+                                saveListData(modelList);
                               },
                             ),
                             IconSlideAction(
@@ -188,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               onTap: () {
                                 model.done = !model.done;
                                 setState(() {});
+                                saveListData(modelList);
                               },
                             ),
                           ],
@@ -217,6 +242,29 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         )));
   }
+
+  void saveListData(List<Model> modelList) {
+    stringTodos.clear();
+    modelList.forEach((Model model) {
+      // Todoオブジェクト -> Map -> String の順でエンコード
+      var encoded = json.encode(model.toJson());
+      stringTodos.add(encoded);
+    });
+
+    // 一度、sharedpreference上に永続化されているリストをクリアする。
+    SharePrefs.deleteListItems();
+    // 永続化
+    SharePrefs.setListItems(stringTodos).then((_) {
+      setState(() {});
+    });
+  }
+
+  void saveCounter(int counter) {
+    // 一度、sharedpreference上に永続化されているリストをクリアする。
+    SharePrefs.deleteCounter();
+    // 永続化
+    SharePrefs.setCounter(counter);
+  }
 }
 
 class Model {
@@ -225,6 +273,17 @@ class Model {
   bool done;
 
   Model({@required this.title, @required this.key, @required this.done});
+
+  Model.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        key = json['key'],
+        done = json['done'];
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'key': key,
+        'done': done,
+      };
 }
 
 Color returnModelsColor(Model model) {
@@ -242,77 +301,5 @@ String retutnModelsToBeStatus(Model model) {
   }
   if (model.done == false) {
     return "完了";
-  }
-}
-
-class DeleteAllButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      color: Theme.of(context).primaryColor,
-      child: Text('全て削除'),
-      onPressed: () async {
-        var result = await showDialog<int>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('確認'),
-              content: Text('本当に全ての「やること」を削除しますか？'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
-                  onPressed: () => Navigator.of(context).pop(0),
-                ),
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(1);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-class DeleteDoneItmeButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      color: Theme.of(context).primaryColor,
-      child: Text('完了済を削除'),
-      onPressed: () async {
-        var result = await showDialog<int>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('確認'),
-              content: Text('本当に完了済の「やること」を削除しますか？'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
-                  onPressed: () => Navigator.of(context).pop(0),
-                ),
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () => Navigator.of(context).pop(1),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
   }
 }
