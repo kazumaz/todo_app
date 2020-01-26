@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 void main() => runApp(MyApp());
 
@@ -28,19 +29,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Model> modelList;
   final myTextController = TextEditingController();
+  int counter = 0;
 
   @override
   void initState() {
     super.initState();
     modelList = [];
-    List<String> titleList = ["Title A", "Title B", "Title C"];
-    for (int i = 0; i < 3; i++) {
-      Model model = Model(
-        title: titleList[i],
-        key: i.toString(),
-      );
-      modelList.add(model);
-    }
   }
 
   @override
@@ -72,9 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.add_circle_outline),
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
-                    modelList
-                        .add(Model(title: myTextController.text, key: "99"));
+                    modelList.add(
+                        Model(title: myTextController.text, key: counter + 1));
                     setState(() {});
+                    counter = counter + 1;
                     myTextController.clear();
                   },
                 ),
@@ -101,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 (Model model) {
                   return Card(
                     elevation: 2.0,
-                    key: Key(model.key),
+                    key: Key(model.key.toString()),
                     child: ListTile(
                       leading: const Icon(Icons.people),
                       title: Text(model.title),
@@ -117,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class Model {
   final String title;
-  final String key;
+  final int key;
 
   Model({@required this.title, @required this.key});
 }
