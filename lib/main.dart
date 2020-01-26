@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // maxLines: null,
                       controller: myTextController,
                       onSubmitted: (input) {
-                        if (input != null) {
+                        if (myTextController.text != "") {
                           modelList.add(Model(
                               title: input, key: counter + 1, done: false));
                           setState(() {});
