@@ -8,11 +8,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter ReorderableListView',
+      title: 'やること',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'ReorderableListView Sample'),
+      home: MyHomePage(title: 'やること'),
     );
   }
 }
@@ -43,6 +43,79 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
+        persistentFooterButtons: <Widget>[
+          RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            color: Theme.of(context).primaryColor,
+            child: Text('完了済を削除'),
+            onPressed: () async {
+              var result = await showDialog<int>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('確認'),
+                    content: Text('本当に完了済の「やること」を削除しますか？'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Cancel'),
+                        onPressed: () => Navigator.of(context).pop(0),
+                      ),
+                      FlatButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          modelList.forEach((model) {
+                            if (model.done == true) {
+                              modelList.remove(model);
+                            }
+                          });
+
+                          setState(() {});
+                          Navigator.of(context).pop(1);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            color: Theme.of(context).primaryColor,
+            child: Text('全て削除'),
+            onPressed: () async {
+              var result = await showDialog<int>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('確認'),
+                    content: Text('本当に全ての「やること」を削除しますか？'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Cancel'),
+                        onPressed: () => Navigator.of(context).pop(0),
+                      ),
+                      FlatButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop(1);
+                          modelList = [];
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
         body: Container(
             child: Column(
           children: <Widget>[
@@ -53,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       decoration: InputDecoration(
-                        labelText: "ToDoを追加してください",
+                        labelText: "やることを追加してください",
                         // hintText: "ToDoを追加してください"
                       ),
                       keyboardType: TextInputType.multiline,
@@ -127,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: <Widget>[
                               Expanded(
                                   child: ListTile(
-                                leading: const Icon(Icons.people),
+                                leading: const Icon(Icons.done),
                                 title: Text(model.title),
                               )),
                               // Container(
@@ -174,5 +247,77 @@ String retutnModelsToBeStatus(Model model) {
   }
   if (model.done == false) {
     return "完了";
+  }
+}
+
+class DeleteAllButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      color: Theme.of(context).primaryColor,
+      child: Text('全て削除'),
+      onPressed: () async {
+        var result = await showDialog<int>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('確認'),
+              content: Text('本当に全ての「やること」を削除しますか？'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(0),
+                ),
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(1);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class DeleteDoneItmeButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      color: Theme.of(context).primaryColor,
+      child: Text('完了済を削除'),
+      onPressed: () async {
+        var result = await showDialog<int>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('確認'),
+              content: Text('本当に完了済の「やること」を削除しますか？'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(0),
+                ),
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(1),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
