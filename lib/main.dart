@@ -51,45 +51,51 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: Container(
-          child: ReorderableListView(
-            padding: EdgeInsets.all(10.0),
-            header: Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.grey,
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  "This is header",
-                  style: TextStyle(fontSize: 18.0),
+            child: Column(
+          children: <Widget>[
+            // Expanded を付与しないとエラーになる。
+            // [https://github.com/flutter/flutter/issues/17036]
+            Expanded(
+                child: ReorderableListView(
+              padding: EdgeInsets.all(10.0),
+              header: Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.grey,
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    "This is header",
+                    style: TextStyle(fontSize: 18.0),
+                  ),
                 ),
               ),
-            ),
-            onReorder: (oldIndex, newIndex) {
-              if (oldIndex < newIndex) {
-                // removing the item at oldIndex will shorten the list by 1.
-                newIndex -= 1;
-              }
-              final Model model = modelList.removeAt(oldIndex);
+              onReorder: (oldIndex, newIndex) {
+                if (oldIndex < newIndex) {
+                  // removing the item at oldIndex will shorten the list by 1.
+                  newIndex -= 1;
+                }
+                final Model model = modelList.removeAt(oldIndex);
 
-              setState(() {
-                modelList.insert(newIndex, model);
-              });
-            },
-            children: modelList.map(
-              (Model model) {
-                return Card(
-                  elevation: 2.0,
-                  key: Key(model.key),
-                  child: ListTile(
-                    leading: const Icon(Icons.people),
-                    title: Text(model.title),
-                    subtitle: Text(model.subTitle),
-                  ),
-                );
+                setState(() {
+                  modelList.insert(newIndex, model);
+                });
               },
-            ).toList(),
-          ),
-        ));
+              children: modelList.map(
+                (Model model) {
+                  return Card(
+                    elevation: 2.0,
+                    key: Key(model.key),
+                    child: ListTile(
+                      leading: const Icon(Icons.people),
+                      title: Text(model.title),
+                      subtitle: Text(model.subTitle),
+                    ),
+                  );
+                },
+              ).toList(),
+            ))
+          ],
+        )));
   }
 }
 
