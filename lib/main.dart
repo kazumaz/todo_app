@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     modelList = [];
-    List<String> titleList = ["Title A", "Title B", "Title C"];    
+    List<String> titleList = ["Title A", "Title B", "Title C"];
     for (int i = 0; i < 3; i++) {
       Model model = Model(
         title: titleList[i],
@@ -51,26 +51,41 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Container(
             child: Column(
-          children: <Widget>[          
-              Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: 
-              TextField(
-                decoration: InputDecoration(
-                    labelText: "ToDoを追加してください",
-                    // hintText: "ToDoを追加してください"
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: "ToDoを追加してください",
+                        // hintText: "ToDoを追加してください"
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: myTextController,
                     ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: myTextController,
-              ),
-            ) ,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline),
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    modelList
+                        .add(Model(title: myTextController.text, key: "99"));
+                    setState(() {});
+                    myTextController.clear();
+                  },
+                ),
+              ],
+            ),
             // Expanded or Flexivle を付与しないとエラーにな  る。
             // [https://github.com/flutter/flutter/issues/17036]
-            
+
             Flexible(
                 child: ReorderableListView(
-              padding: EdgeInsets.all(10.0),  
+              padding: EdgeInsets.all(10.0),
               onReorder: (oldIndex, newIndex) {
                 if (oldIndex < newIndex) {
                   // removing the item at oldIndex will shorten the list by 1.
@@ -82,8 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   modelList.insert(newIndex, model);
                 });
               },
-              children: 
-              modelList.map(
+              children: modelList.map(
                 (Model model) {
                   return Card(
                     elevation: 2.0,
@@ -105,8 +119,5 @@ class Model {
   final String title;
   final String key;
 
-  Model({
-    @required this.title,
-    @required this.key
-  });
+  Model({@required this.title, @required this.key});
 }
