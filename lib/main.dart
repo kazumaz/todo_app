@@ -66,12 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       FlatButton(
                         child: Text('OK'),
                         onPressed: () {
-                          modelList.forEach((model) {
-                            if (model.done == true) {
-                              modelList.remove(model);
-                            }
-                          });
-
+                          modelList.removeWhere((model) => model.done == true);
                           setState(() {});
                           Navigator.of(context).pop(1);
                         },
@@ -105,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Text('OK'),
                         onPressed: () {
                           Navigator.of(context).pop(1);
-                          modelList = [];
+                          modelList.clear();
                           setState(() {});
                         },
                       ),
