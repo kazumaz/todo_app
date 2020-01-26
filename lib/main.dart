@@ -66,8 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.add_circle_outline),
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
-                    modelList.add(
-                        Model(title: myTextController.text, key: counter + 1));
+                    modelList.add(Model(
+                        title: myTextController.text,
+                        key: counter + 1,
+                        done: false));
                     setState(() {});
                     counter = counter + 1;
                     myTextController.clear();
@@ -96,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 (Model model) {
                   return Card(
                       elevation: 2.0,
+                      color: returnModelsColor(model),
                       key: Key(model.key.toString()),
                       child: Slidable(
                           actionPane: SlidableDrawerActionPane(),
@@ -111,10 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               },
                             ),
                             IconSlideAction(
-                              caption: '完了',
+                              caption: retutnModelsToBeStatus(model),
                               color: Colors.indigo,
                               icon: Icons.done,
-                              onTap: () => {},
+                              onTap: () {
+                                model.done = !model.done;
+                                setState(() {});
+                              },
                             ),
                           ],
                           child: Row(
@@ -124,17 +130,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                 leading: const Icon(Icons.people),
                                 title: Text(model.title),
                               )),
-                              Container(
-                                  width: 40,
-                                  child: InkWell(
-                                      child: Icon(
-                                        Icons.remove_circle,
-                                        color: Colors.redAccent,
-                                      ),
-                                      onTap: () {
-                                        modelList.remove(model);
-                                        setState(() {});
-                                      }))
+                              // Container(
+                              //     width: 40,
+                              //     child: InkWell(
+                              //         child: Icon(
+                              //           Icons.remove_circle,
+                              //           color: Colors.redAccent,
+                              //         ),
+                              //         onTap: () {
+                              //           modelList.remove(model);
+                              //           setState(() {});
+                              //         }))
                             ],
                           )));
                 },
@@ -148,6 +154,25 @@ class _MyHomePageState extends State<MyHomePage> {
 class Model {
   final String title;
   final int key;
+  bool done;
 
-  Model({@required this.title, @required this.key});
+  Model({@required this.title, @required this.key, @required this.done});
+}
+
+Color returnModelsColor(Model model) {
+  if (model.done == true) {
+    return Colors.grey[400];
+  }
+  if (model.done == false) {
+    return Colors.white;
+  }
+}
+
+String retutnModelsToBeStatus(Model model) {
+  if (model.done == true) {
+    return "未完了";
+  }
+  if (model.done == false) {
+    return "完了";
+  }
 }
