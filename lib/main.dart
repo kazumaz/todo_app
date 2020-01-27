@@ -178,9 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
+
             // Expanded or Flexivle を付与しないとエラーにな  る。
             // [https://github.com/flutter/flutter/issues/17036]
-
             Flexible(
                 child: ReorderableListView(
               padding: EdgeInsets.all(10.0),
