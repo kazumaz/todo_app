@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               },
                             ),
                             IconSlideAction(
-                              caption: retutnModelsToBeStatus(model),
+                              caption: returnModelsToBeStatus(model),
                               color: Colors.indigo,
                               icon: Icons.done,
                               onTap: () {
@@ -229,9 +229,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                           child: Row(
                             children: <Widget>[
+                              Container(
+                                  width: 40,
+                                  child: InkWell(
+                                      child:
+                                          Icon(returnModelsCheckBoxIcon(model)
+                                              // color: Colors.redAccent,
+                                              ),
+                                      onTap: () {
+                                        model.done = !model.done;
+                                        setState(() {});
+                                        saveListData(modelList);
+                                      })),
                               Expanded(
                                   child: ListTile(
-                                leading: const Icon(Icons.done),
+                                // leading: const Icon(Icons.done),
                                 title: Text(model.title),
                               )),
                               // Container(
@@ -306,11 +318,20 @@ Color returnModelsColor(Model model) {
   }
 }
 
-String retutnModelsToBeStatus(Model model) {
+String returnModelsToBeStatus(Model model) {
   if (model.done == true) {
     return "未完了";
   }
   if (model.done == false) {
     return "完了";
+  }
+}
+
+IconData returnModelsCheckBoxIcon(Model model) {
+  if (model.done == true) {
+    return Icons.check_box;
+  }
+  if (model.done == false) {
+    return Icons.check_box_outline_blank;
   }
 }
