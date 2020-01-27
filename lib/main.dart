@@ -216,6 +216,60 @@ class _MyHomePageState extends State<MyHomePage> {
                                 saveListData(modelList);
                               },
                             ),
+                            IconSlideAction(
+                              caption: "編集",
+                              color: Colors.indigo,
+                              icon: Icons.edit,
+                              onTap: () {
+                                //編集画面
+                                showDialog<String>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      // String result = '';
+                                      return AlertDialog(
+                                        title: Text('編集してください'),
+                                        content: new Row(
+                                          children: <Widget>[
+                                            new Expanded(
+                                                child: new TextField(
+                                              autofocus: true,
+                                              decoration: new InputDecoration(
+                                                  // labelText: "編集する場合は入力してください",
+                                                  hintText: model.title),
+                                              onChanged: (value) {
+                                                model.title = value;
+                                              },
+                                            )),
+                                          ],
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('Cancel'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('Ok'),
+                                            onPressed: () {
+                                              Model tmpModel = Model(
+                                                  title: model.title,
+                                                  key: model.key,
+                                                  done: model.done);
+                                              int index =
+                                                  modelList.indexOf(model);
+                                              modelList[index] = tmpModel;
+                                              setState(() {});
+                                              saveListData(modelList);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                            ),
                             // IconSlideAction(
                             //   caption: returnModelsToBeStatus(model),
                             //   color: Colors.indigo,
@@ -291,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Model {
-  final String title;
+  String title;
   final int key;
   bool done;
 
@@ -335,3 +389,46 @@ IconData returnModelsCheckBoxIcon(Model model) {
     return Icons.check_box_outline_blank;
   }
 }
+
+// //　編集画面
+// Future<String> showInputDialog(
+//     BuildContext context, Model model, List<Model> modelList) {
+//   return showDialog<String>(
+//       context: context,
+//       barrierDismissible: false,
+//       builder: (BuildContext context) {
+//         String result = '';
+//         return AlertDialog(
+//           title: Text('編集してください'),
+//           content: new Row(
+//             children: <Widget>[
+//               new Expanded(
+//                   child: new TextField(
+//                 autofocus: true,
+//                 decoration: new InputDecoration(
+//                     // labelText: "編集する場合は入力してください",
+//                     hintText: model.title),
+//                 onChanged: (value) {
+//                   model.title = value;
+//                   print(model.title);
+//                 },
+//               )),
+//             ],
+//           ),
+//           actions: <Widget>[
+//             FlatButton(
+//               child: Text('Ok'),
+//               onPressed: () {
+//                 Model tmpModel =
+//                     Model(title: model.title, key: model.key, done: model.done);
+//                 int index = modelList.indexOf(model);
+//                 modelList[index] = tmpModel;
+
+//                 Navigator.of(context).pop(model.title);
+//                 print(model.title);
+//               },
+//             ),
+//           ],
+//         );
+//       });
+// }
