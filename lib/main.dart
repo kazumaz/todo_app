@@ -327,7 +327,6 @@ class _MyHomePageState extends State<MyHomePage> {
       var encoded = json.encode(model.toJson());
       stringTodos.add(encoded);
     });
-
     // 一度、sharedpreference上に永続化されているリストをクリアする。
     SharePrefs.deleteListItems();
     // 永続化
@@ -423,7 +422,6 @@ IconData returnModelsCheckBoxIcon(Model model) {
 //                     Model(title: model.title, key: model.key, done: model.done);
 //                 int index = modelList.indexOf(model);
 //                 modelList[index] = tmpModel;
-
 //                 Navigator.of(context).pop(model.title);
 //                 print(model.title);
 //               },
