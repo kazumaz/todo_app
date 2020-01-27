@@ -216,16 +216,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 saveListData(modelList);
                               },
                             ),
-                            IconSlideAction(
-                              caption: returnModelsToBeStatus(model),
-                              color: Colors.indigo,
-                              icon: Icons.done,
-                              onTap: () {
-                                model.done = !model.done;
-                                setState(() {});
-                                saveListData(modelList);
-                              },
-                            ),
+                            // IconSlideAction(
+                            //   caption: returnModelsToBeStatus(model),
+                            //   color: Colors.indigo,
+                            //   icon: Icons.done,
+                            //   onTap: () {
+                            //     model.done = !model.done;
+                            //     setState(() {});
+                            //     saveListData(modelList);
+                            //   },
+                            // ),
                           ],
                           child: Row(
                             children: <Widget>[
