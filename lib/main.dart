@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // theme: ThemeData.dark(),
       home: MyHomePage(title: 'やること'),
     );
   }
@@ -62,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         persistentFooterButtons: <Widget>[
+          // ここを解除したら設定画面
+          SelectionButton(), 
           RaisedButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -430,3 +433,111 @@ IconData returnModelsCheckBoxIcon(Model model) {
 //         );
 //       });
 // }
+
+class SelectionButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => RaisedButton(
+        onPressed: () {
+          _navigateAndDisplaySelection(context);
+        },
+        child: Text('設定'),
+      );
+
+  Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SelectionScreen()),
+    );
+  }
+}
+
+class SelectionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('選択してください'),
+        ),
+        body: GridView.count(
+            crossAxisCount: 5, // 1行に表示する数
+            crossAxisSpacing: 10.0, // 縦スペース
+            mainAxisSpacing: 10.0, // 横スペース
+            shrinkWrap: true,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.blue),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.red),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.purple),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.pink),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.orange),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.cyan),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.black),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.indigo),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.brown),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+              IconButton(
+                icon: Icon(Icons.lens, color: Colors.lime),
+                iconSize: 70.0,
+                onPressed: (){},
+              ),
+            ]),
+
+        // Center(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: <Widget>[
+        //       Padding(
+        //         padding: EdgeInsets.all(8.0),
+        //         child: RaisedButton(
+        //           onPressed: () {
+        //             Navigator.pop(context, '選択肢1');
+        //           },
+        //           child: Text('選択肢1'),
+        //         ),
+        //       ),
+        //       Padding(
+        //         padding: EdgeInsets.all(8.0),
+        //         child: RaisedButton(
+        //             onPressed: () {
+        //               Navigator.pop(context, '選択肢2');
+        //             },
+        //             child: Text('選択肢2')),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+      );
+}
