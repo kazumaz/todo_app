@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         persistentFooterButtons: <Widget>[
           // ここを解除したら設定画面
-          SelectionButton(), 
+          // SelectionButton(), 
           RaisedButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
